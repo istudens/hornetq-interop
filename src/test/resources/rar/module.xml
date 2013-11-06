@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="hornetq-eap5">
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+    <resources>
+        <resource-root path="hornetq-ra.jar"/>
+        <resource-root path="hornetq-jms.jar"/>
+        <resource-root path="hornetq-core-client.jar"/>
+        <resource-root path="netty.jar"/>
+    </resources>
+    <dependencies>
+       <!-- add the dependencies required by JMS Bridge code                -->
+       <module name="javax.api" />
+       <module name="javax.jms.api" />
+       <module name="javax.transaction.api"/>
+       <module name="org.jboss.remote-naming"/>
+        <module name="javax.resource.api" />
+        <module name="org.jboss.jboss-transaction-spi"/>
+        <!--<module name="org.jboss.netty"/>-->
+        <module name="eap5-client"/>
+       <!-- we depend on org.hornetq module since we will send messages to  -->
+       <!-- the HornetQ server embedded in the local WildFly instance       -->
+       <!--<module name="org.hornetq" />-->
+    </dependencies>
+</module>

@@ -1,0 +1,15 @@
+<subsystem xmlns="urn:jboss:domain:resource-adapters:2.0">
+	<resource-adapters>
+		<resource-adapter id="hornetq-eap5-ra">
+			<archive>hornetq-eap5-ra.rar</archive>
+			<connection-definitions>
+				<connection-definition
+					class-name="org.hornetq.ra.HornetQRAManagedConnectionFactory"
+					jndi-name="java:/HornetQEAP5RA" pool-name="HornetQEAP5RAPool" />
+                <!--<security>-->
+                    <!--<application/>-->
+                <!--</security>-->
+			</connection-definitions>
+		</resource-adapter>
+	</resource-adapters>
+</subsystem>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connector xmlns="http://java.sun.com/xml/ns/javaee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+           http://java.sun.com/xml/ns/j2ee/connector_1_5.xsd"
+           version="1.5" metadata-complete="true">
+
+    <vendor-name>Red Hat Middleware LLC</vendor-name>
+    <eis-type>HornetQ EAP5 RA</eis-type>
+    <resourceadapter-version>1.0</resourceadapter-version>
+
+    <resourceadapter>
+        <resourceadapter-class>org.hornetq.ra.HornetQResourceAdapter</resourceadapter-class>
+        <config-property>
+            <description>
+                The transport type. Multiple connectors can be configured by using a comma separated list,
+                i.e. org.hornetq.core.remoting.impl.invm.InVMConnectorFactory,org.hornetq.core.remoting.impl.invm.InVMConnectorFactory.
+            </description>
+            <config-property-name>ConnectorClassName</config-property-name>
+            <config-property-type>java.lang.String</config-property-type>
+            <config-property-value>org.hornetq.core.remoting.impl.netty.NettyConnectorFactory</config-property-value>
+        </config-property>
+        <config-property>
+            <description>The transport configuration. These values must be in the form of key=val;key=val;,
+                if multiple connectors are used then each set must be separated by a comma i.e. host=host1;port=5445,host=host2;port=5446.
+                Each set of params maps to the connector classname specified.
+            </description>
+            <config-property-name>ConnectionParameters</config-property-name>
+            <config-property-type>java.lang.String</config-property-type>
+            <config-property-value>host=10.34.28.106;port=5445</config-property-value>
+        </config-property>
+
+        <outbound-resourceadapter>
+            <connection-definition>
+                <managedconnectionfactory-class>org.hornetq.ra.HornetQRAManagedConnectionFactory</managedconnectionfactory-class>
+                <connectionfactory-interface>org.hornetq.ra.HornetQRAConnectionFactory</connectionfactory-interface>
+                <connectionfactory-impl-class>org.hornetq.ra.HornetQRAConnectionFactoryImpl</connectionfactory-impl-class>
+                <connection-interface>javax.jms.Session</connection-interface>
+                <connection-impl-class>org.hornetq.ra.HornetQRASession</connection-impl-class>
+            </connection-definition>
+
+            <transaction-support>XATransaction</transaction-support>
+            <reauthentication-support>false</reauthentication-support>
+        </outbound-resourceadapter>
+    </resourceadapter>
+</connector>

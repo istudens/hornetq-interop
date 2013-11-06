@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jboss.test</groupId>
+    <artifactId>hornetq-interop</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <!--<packaging>jar</packaging>-->
+
+    <properties>
+        <version.jboss.javaee>3.0.2.Final</version.jboss.javaee>
+        <version.wildfly>8.0.0.Beta1</version.wildfly>
+        <version.arquillian>1.1.1.Final</version.arquillian>
+        <version.junit>4.11</version.junit>
+        <version.apache.httpcomponents>4.1.2</version.apache.httpcomponents>
+
+        <jpda.server.jvm.args></jpda.server.jvm.args>
+        <memory.server.jvm.args>-Xmx512m -XX:MaxPermSize=256m</memory.server.jvm.args>
+        <surefire.server.jvm.args>${memory.server.jvm.args} ${jpda.server.jvm.args}</surefire.server.jvm.args>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${version.arquillian}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-6.0</artifactId>
+            <version>${version.jboss.javaee}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${version.junit}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${version.apache.httpcomponents}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${version.apache.httpcomponents}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-connector</artifactId>
+            <version>${version.wildfly}</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.11</version>
+                <configuration>
+                    <!-- Prevent test and server output appearing in console. -->
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <enableAssertions>true</enableAssertions>
+
+                    <!-- Tests to execute. -->
+                    <includes>
+                        <include>**/*TestCase.java</include>
+                    </includes>
+
+                    <!-- System properties passed to test cases -->
+                    <systemPropertyVariables>
+                        <!-- Used in arquillian.xml -->
+                        <server.jvm.args>${surefire.server.jvm.args}</server.jvm.args>
+                    </systemPropertyVariables>
+
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>arq-wildfly-managed</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-arquillian-container-managed</artifactId>
+                    <version>${version.wildfly}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>jpda.profile</id>
+            <activation>
+                <property>
+                    <name>jpda</name>
+                </property>
+            </activation>
+            <properties>
+                <jpda.server.jvm.args>-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y</jpda.server.jvm.args>
+            </properties>
+        </profile>
+    </profiles>
+</project>
