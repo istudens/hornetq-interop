@@ -84,8 +84,7 @@ public class InteropTestCase extends AbstractMgmtTestBase {
     public static Archive<?> webDeployment() {
         final Archive<?> deployment = ShrinkWrap.create(WebArchive.class, WAR_DEPLOYMENT)
                 .addClasses(ConsumerMDB.class, MessageSenderServlet.class)
-                .addAsManifestResource(new StringAsset("Dependencies: org.jboss.modules, hornetq-eap5\n"), "MANIFEST.MF");
-//                .addAsManifestResource(new StringAsset("Dependencies: org.jboss.modules, hornetq-eap5, eap5-client\n"), "MANIFEST.MF");
+                .addAsManifestResource(new StringAsset("Dependencies: org.jboss.modules, hornetq-eap5, eap5-client\n"), "MANIFEST.MF");
         deployment.as(ZipExporter.class).exportTo(new File(tmpdir, WAR_DEPLOYMENT), true);
         System.out.println(deployment.toString(true));
         return deployment;

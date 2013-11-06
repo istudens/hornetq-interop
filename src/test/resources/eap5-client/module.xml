@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="urn:jboss:module:1.1" name="eap5-client">
     <resources>
-        <resource-root path="jbossall-client.jar"/>
-        <resource-root path="jbosssx-as-client.jar"/>
-        <resource-root path="jbosssx-client.jar"/>
         <resource-root path="jnp-client.jar"/>
-        <resource-root path="jboss-security-spi.jar"/>
         <resource-root path="jboss-logging-spi.jar"/>
-        <resource-root path="jboss-javaee.jar"/>
-    </resources>
+   </resources>
     <dependencies>
         <module name="javax.api"/>
-        <!--<module name="org.picketbox"/>-->
     </dependencies>
 </module>

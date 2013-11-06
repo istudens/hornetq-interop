@@ -44,13 +44,8 @@ public class EAP5ClientModuleSetup extends AbstractMgmtServerSetupTask {
         }
         ClassLoader tccl = Thread.currentThread().getContextClassLoader();
         copyFile(new File(slot, "module.xml"), tccl.getResource("eap5-client/module.xml").openStream());
-        copyFile(new File(slot, "jbossall-client.jar"), tccl.getResource("eap5-client/jbossall-client.jar").openStream());
-        copyFile(new File(slot, "jbosssx-as-client.jar"), tccl.getResource("eap5-client/jbosssx-as-client.jar").openStream());
-        copyFile(new File(slot, "jbosssx-client.jar"), tccl.getResource("eap5-client/jbosssx-client.jar").openStream());
         copyFile(new File(slot, "jnp-client.jar"), tccl.getResource("eap5-client/jnp-client.jar").openStream());
-        copyFile(new File(slot, "jboss-security-spi.jar"), tccl.getResource("eap5-client/jboss-security-spi.jar").openStream());
         copyFile(new File(slot, "jboss-logging-spi.jar"), tccl.getResource("eap5-client/jboss-logging-spi.jar").openStream());
-        copyFile(new File(slot, "jboss-javaee.jar"), tccl.getResource("eap5-client/jboss-javaee.jar").openStream());
     }
 
     private void removeEAP5ClientModule() throws Exception {
