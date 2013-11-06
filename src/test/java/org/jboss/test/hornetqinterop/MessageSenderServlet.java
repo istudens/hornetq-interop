@@ -1,8 +1,5 @@
 package org.jboss.test.hornetqinterop;
 
-import org.jboss.modules.Module;
-import org.jboss.modules.ModuleIdentifier;
-
 import javax.jms.Destination;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
@@ -84,34 +81,20 @@ public class MessageSenderServlet extends HttpServlet {
     }
 
     private Context createEAP5InitialContext(final String host) throws NamingException, IOException {
-        final Module module;
-        try {
-            module = Module.getBootModuleLoader().loadModule(ModuleIdentifier.create("eap5-client"));
-        } catch (Throwable e) {
-            throw new IOException(e);
-        }
-        if (module == null)
-            throw new RuntimeException("Cannot find eap5-client module!");
+        final String port = "1099";
+        final String user = "guest";
+        final String pass = "guest";
 
-        final ClassLoader currentCL = Thread.currentThread().getContextClassLoader();
-        try {
-            Thread.currentThread().setContextClassLoader(module.getClassLoader());
-            final String port = "1099";
-            final String user = "guest";
-            final String pass = "guest";
+        Properties properties = new Properties();
+        properties.put(Context.INITIAL_CONTEXT_FACTORY, ModuleInitialContextFactory.class.getName());
+        properties.put(ModuleInitialContextFactory.MODULE_NAME, "eap5-client");
+        properties.put(ModuleInitialContextFactory.MODULE_INITIAL_CONTEXT_FACTORY, "org.jboss.security.jndi.JndiLoginInitialContextFactory");
+        properties.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");
+        properties.put(Context.PROVIDER_URL, "jnp://"+ host +":"+port);
+        properties.put(Context.SECURITY_PRINCIPAL, user);
+        properties.put(Context.SECURITY_CREDENTIALS, pass);
 
-            Properties properties = new Properties();
-            properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.security.jndi.JndiLoginInitialContextFactory");
-    //        properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
-            properties.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");
-            properties.setProperty("java.naming.provider.url", "jnp://"+ host +":"+port);
-            properties.setProperty(Context.SECURITY_PRINCIPAL, user);
-            properties.setProperty(Context.SECURITY_CREDENTIALS, pass);
-
-            return new InitialContext(properties);
-        } finally {
-            Thread.currentThread().setContextClassLoader(currentCL);
-        }
+        return new InitialContext(properties);
     }
 
 }
